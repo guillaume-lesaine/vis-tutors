@@ -1,0 +1,5 @@
+data/scraper
+.vscode
+venv
+__pycache__
+geckodriver.log
