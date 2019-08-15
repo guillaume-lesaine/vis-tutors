@@ -86,4 +86,4 @@ print(qc_scarping_unit(dataframe))
 print(qc_scraping_batches(dataframe, 'location', 18))
 print(qc_scraping_batches(dataframe, 'topic', 12))
 
-    
+# Check for null
