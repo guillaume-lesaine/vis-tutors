@@ -1,5 +1,6 @@
 data/scraper
 data/consolidator
+data/context/firstnames_parts
 .vscode
 venv
 __pycache__

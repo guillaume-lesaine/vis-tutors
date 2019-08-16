@@ -3,68 +3,66 @@ import json
 import re
 import pandas as pd
 from pathlib import Path
-import shutil
+import codecs
+import unidecode
 
-def checkout(directory):
-    if os.path.exists(directory):
-        shutil.rmtree(directory)
-    os.makedirs(directory)
+import package as pkg
 
-directory_consolidated = "./data/consolidator/units"
-directory_global = "./data/consolidator/globals"
+path_directory_scraper = './data/scraper'
+path_directory_units = './data/consolidator/units'
+path_directory_globals = './data/consolidator/globals'
 
-checkout(directory_consolidated)
-checkout(directory_global)
+pkg.checkout_directory(path_directory_units)
+pkg.checkout_directory(path_directory_globals)
 
-df_topics = pd.read_csv("./data/context/search_topics.csv", sep=';', index_col='search_topic')
-df_locations = pd.read_csv("./data/context/search_locations.csv", sep=';', index_col='search_location')
+df_topics = pd.read_csv('./data/context/search_topics.csv', sep=';', index_col='search_topic')
+df_locations = pd.read_csv('./data/context/search_locations.csv', sep=';', index_col='search_location')
 
-for filename in Path('./data/scraper').glob('**/*.json'):
-    filestr = str(filename).split("\\")[-1]
+
+for filename in Path(path_directory_scraper).glob('**/*.json'):
+
+    filestr = str(filename).split('\\')[-1]
     filestr_parts = re.split('_|\.[a-z]',filestr)[:-1]
     search_topic, search_location = filestr_parts[0], filestr_parts[2].title()
     search_topic, search_location = df_topics.loc[search_topic, 'topic'], df_locations.loc[search_location, 'location']
 
-    with open(directory_consolidated + f'/{search_topic}_{search_location}.csv', 'a') as output:
-        with open(filename) as f:
-            for i, line in enumerate(f):
+    with codecs.open(path_directory_units + f'/{search_topic}_{search_location}.csv', 'a', encoding='utf-8') as output:
+        with codecs.open(filename, encoding='utf-8') as input:
+            output.write('index,url,search_topic,search_location,teacher,location,rating,reviews,price,first_free,ambassador,picture\n')
+
+            for line in input:
 
                 line = line.replace('"rating": null, "reviews": null', '"rating": "0", "reviews": "0 avi"')
                 data = json.loads(line)
                 data.pop('website')
 
-                data["search_topic"], data["search_location"] = search_topic, search_location
+                data['search_topic'], data['search_location'] = search_topic, search_location
 
-                if i == 0:
-                    csv_header = [str(x) for x in data.keys()]
-                    csv_header = ','.join(csv_header) + '\n'
-                    output.write(csv_header)
-                else :
-                    pass
-
-                if data["teacher"]:
-                    data["url"] = re.sub(r'(https://www.superprof.fr/|.html)', '', data["url"])
-                    data["teacher"] = data["teacher"].strip()
-                    data["reviews"] = data["reviews"].split(' ')[0]
-                    data["price"] = data["price"].replace('€ ', '')
-                    csv_body = [str(x) for x in data.values()]
-                    csv_body = ','.join(csv_body) + '\n'
+                if data['teacher']:
+                    data['url'] = re.sub(r'(https://www.superprof.fr/|.html)', '', data['url'])
+                    data['teacher'] = data['teacher'].strip()
+                    data['reviews'] = data['reviews'].split(' ')[0]
+                    data['price'] = data['price'].replace('€ ', '')
+                    line = [str(x) for x in data.values()]
+                    line = ','.join(line) + '\n'
                     try:
-                        output.write(csv_body)
+                        output.write(line)
                     except:
                         continue
                 else :
                     pass
 
 
-with open(directory_global + "/global.csv","a") as output:
+with open(path_directory_globals + '/global.csv','a', encoding='utf-8') as output:
     first = True
-    for filename in Path(directory_consolidated).glob('*.csv'):
-        with open(filename) as input:
-            for i, line in enumerate(input):
-                if i == 0:
-                    if first:
-                        output.write(line)
-                        first = False
-                else:
-                    output.write(line)
+    
+    for filename in Path(path_directory_units).glob('*.csv'):
+        with codecs.open(filename, encoding='utf-8') as input:
+
+            headers = input.readline()
+            if first:
+                output.write(headers)
+                first = False
+
+            for line in input:
+                output.write(line)
