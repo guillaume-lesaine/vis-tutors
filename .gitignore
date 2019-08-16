@@ -1,6 +1,6 @@
 data/scraper
-data/consolidator
-data/context/firstnames_parts
+data/scraper_consolidation
+data/firstnames_partition
 .vscode
 venv
 __pycache__

@@ -6,14 +6,16 @@ from pathlib import Path
 import codecs
 import unidecode
 
-import package as pkg
+import package.wranglers as wgl
 
 path_directory_scraper = './data/scraper'
-path_directory_units = './data/consolidator/units'
-path_directory_globals = './data/consolidator/globals'
+path_directory_consolidation = './data/scraper_consolidation'
+path_directory_units = path_directory_consolidation + './units'
+path_directory_globals = path_directory_consolidation + './globals'
 
-pkg.checkout_directory(path_directory_units)
-pkg.checkout_directory(path_directory_globals)
+wgl.checkout_directory(path_directory_consolidation)
+wgl.checkout_directory(path_directory_units)
+wgl.checkout_directory(path_directory_globals)
 
 df_topics = pd.read_csv('./data/context/search_topics.csv', sep=';', index_col='search_topic')
 df_locations = pd.read_csv('./data/context/search_locations.csv', sep=';', index_col='search_location')

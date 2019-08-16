@@ -3,20 +3,12 @@ import pandas as pd
 import re
 import json
 import os
-import inspect
+import sys
+sys.path.append('..')
 
 pd.options.mode.chained_assignment = None
 
-def show_function(func):
-    '''Decorator to print function call details - parameters names and effective values'''
-
-    def wrapper(*args, **kwargs):
-        func_args = inspect.signature(func).bind(*args, **kwargs).arguments 
-        func_args_str =  ', '.join('{} = {!r}'.format(*item) for item in list(func_args.items())[1:]) # Avoid the dataframe
-        print(f'\n------- {func.__qualname__} ( {func_args_str} ) -------\n')
-        return func(*args, **kwargs)
-
-    return wrapper
+from package.functools import *
 
 def read_output(filename):
     line_count = 0
@@ -56,8 +48,8 @@ def consolidate_outputs():
     return df
 
 @show_function
-def qc_scarping_unit(df):
-    '''QC Each scraped files for indexes compared to lines'''
+def qc_scraping_unit(df):
+    print('--- QC Each scraped files for indexes compared to lines\n')
 
     expected_gap = 1
 
@@ -66,24 +58,31 @@ def qc_scarping_unit(df):
     df = df[df["gap"] > 0]
     df["error"] = df["gap"] / df["length"] * 100
 
-    return df
+    try:
+        assert df.empty
+        print('-')
+    except:
+        print(df)
 
 @show_function
-def qc_scraping_batches(df, batch, expected_files):
-    '''QC Coherence of numbers of scraped files in a batch (location or topic)'''
+def qc_scraping_batches(df, batch, expected_file_count):
+    print(f'/ QC Coherence of numbers of scraped files in a {batch}\n')
 
     l = ['location', 'topic']
     l.remove(batch)
     elements = l[0]
 
     qc = df.groupby(f'search_{batch}').apply(lambda x: agg_groupby_search(x, elements)).reset_index()
+    qc = qc[qc[f'search_{elements}_count'] != expected_file_count]
 
-    return qc[qc[f'search_{elements}_count'] != expected_files]
+    try:
+        assert qc.empty
+        print('-')
+    except:
+        print(qc)
 
 dataframe = consolidate_outputs()
 
-print(qc_scarping_unit(dataframe))
-print(qc_scraping_batches(dataframe, 'location', 18))
-print(qc_scraping_batches(dataframe, 'topic', 12))
-
-# Check for null
+qc_scraping_unit(dataframe)
+qc_scraping_batches(dataframe, 'location', 18)
+qc_scraping_batches(dataframe, 'topic', 12)
