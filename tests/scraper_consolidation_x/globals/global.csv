@@ -1,0 +1,11 @@
+index,url,search_topic,search_location,teacher,location,rating,reviews,price,first_free,ambassador,picture
+0,prof,chemistry,bordeaux,JEAN PIERRE,Bordeaux,5,21,38,1,1,1
+1,cours,chemistry,bordeaux,JEAN MARC,Bordeaux,4.7,10,24,0,1,1
+2,professeur,chemistry,bordeaux,JEAN MARC,Bordeaux,4.7,10,24,0,1,1
+3,3536-YYY,chemistry,bordeaux,JEAN MARC,Bordeaux,5,4,35,1,0,1
+4,cours-chimie,chemistry,bordeaux,JEAN MARC,Bordeaux,4.9,4,24,1,0,1
+0,aaa-bbb-ccc,maths,lille,étienne,Lille,5,10,35,0,1,1
+1,,maths,lille,Iker,Lille,0,0,28,0,1,1
+2,,maths,lille,Iker,Lille,0,0,28,0,1,1
+3,ggg,maths,lille,Alan,Lille,4.9,21,25,0,1,1
+4,ddd-eeee,maths,lille,Noël,Lille,4.9,14,20,0,0,1

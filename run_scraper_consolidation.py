@@ -5,11 +5,17 @@ import pandas as pd
 from pathlib import Path
 import codecs
 import unidecode
+import argparse
 
 import package.wranglers as wgl
 
-path_directory_scraper = './data/scraper'
-path_directory_consolidation = './data/scraper_consolidation'
+parser = argparse.ArgumentParser()
+parser.add_argument('-m', type=str, default='data', help='Mode to run the script on')
+args = parser.parse_args()
+
+path_data_directory = f'./{args.m}'
+path_directory_scraper = path_data_directory + '/scraper'
+path_directory_consolidation = path_data_directory + '/scraper_consolidation'
 path_directory_units = path_directory_consolidation + './units'
 path_directory_globals = path_directory_consolidation + './globals'
 
