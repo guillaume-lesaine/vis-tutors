@@ -1,0 +1,12 @@
+firstname,sex,number_men,number_women,ratio_men,ratio_women
+A,m,27,0,1.0,0.0
+ABÉLIA,w,0,8,0.0,1.0
+ANNE NOËLLE,w,0,9,0.0,1.0
+B,w,0,25,0.0,1.0
+C,m,90,10,0.9,0.1
+D,w,10,90,0.1,0.9
+ÉTIENNE,m,5,0,1.0,0.0
+ETIENNE,m,5,0,1.0,0.0
+F,u,89,11,0.89,0.11
+MARGAUX,w,0,1,0.0,1.0
+MICHEL,m,1,0,1.0,0.0
