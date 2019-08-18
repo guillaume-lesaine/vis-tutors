@@ -1,7 +1,6 @@
 data/scraper
 data/scraper_consolidation
 data/firstnames_partition
-tests/scraper
 tests/scraper_consolidation
 tests/firstnames_partition
 firstnames_temporary.csv
